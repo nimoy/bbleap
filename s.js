@@ -20,7 +20,6 @@ var w = new ws({server:server})
 
 w.on('connection', function (wsoc) {
   soc = wss(wsoc)
-  console.log('new soc')
   soc.on('data', function (chunk) {
     var d = JSON.parse(chunk)
     var fins = 2
@@ -33,7 +32,6 @@ w.on('connection', function (wsoc) {
       fins++
       if (y < max && y >min) {
         var val = (p.pos[1]-min)/(max-min)
-        console.log(val)
         sender.send('/LFO'+fins+'/Rate1','f',[val])
       }
     }
@@ -45,7 +43,7 @@ w.on('connection', function (wsoc) {
 
 var sender = new osc.UdpSender('127.0.0.1', 7777)
 
-// var receiver = new osc.UdpReceiver(7777)
-// receiver.on('', function(e) {
-//   console.log(e)
-// })
+var receiver = new osc.UdpReceiver(9999)
+receiver.on('', function(e) {
+  console.log(e)
+})

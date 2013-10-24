@@ -21,7 +21,6 @@ module.exports = function () {
     var hands = frame.hands
     var pointables = frame.pointables
 
-
     var FINGERS = {}
     
     for (var i = 0, pointable; pointable = pointables[i++];) {
