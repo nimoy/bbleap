@@ -28,8 +28,8 @@ w.on('connection', function (wsoc) {
     var min = 50
     var max = 450
     for (f in d) {
-      var y = p.pos[1]
       var p = d[f]
+      var y = p.pos[1]
       fins++
       if (y < max && y >min) {
         var val = (p.pos[1]-min)/(max-min)
