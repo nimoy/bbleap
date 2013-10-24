@@ -31,10 +31,10 @@ w.on('connection', function (wsoc) {
 
 var sender = new osc.UdpSender('127.0.0.1', 7777)
 
-var receiver = new osc.UdpReceiver(7777)
-receiver.on('', function(e) {
-  console.log(e)
-})
+// var receiver = new osc.UdpReceiver(7777)
+// receiver.on('', function(e) {
+//   console.log(e)
+// })
 
 setInterval(function() {
   var p1 = '/LFO2/Rate1'
