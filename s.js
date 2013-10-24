@@ -37,8 +37,8 @@ var sender = new osc.UdpSender('127.0.0.1', 7777)
 // })
 
 setInterval(function() {
-  var p1 = '/LFO2/Rate1'
-  var p2 = '/LFO2/Rate2'
+  var p1 = '/LFO4/Rate1'
+  var p2 = '/LFO3/Rate2'
   sender.send(p1,'f',[Math.random()])
   sender.send(p2,'f',[Math.random()])
 }, 300)
