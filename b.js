@@ -1,8 +1,8 @@
 // CLIENT
 
 var host = window.document.location.host.replace(/:.*/, '')
-var lp = require('./leap.js')
 var wss = require('websocket-stream')
+var lp = require('./leap.js')
 var ws = wss('ws://'+host)
 
 var container = document.body

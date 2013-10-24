@@ -1,7 +1,8 @@
 // SERVER
 
 var osc = require('omgosc')
-var ws = require('ws')
+var ws = require('ws').Server
+var wss = require('websocket-stream')
 var http = require('http')
 
 var server = http.createServer(function (req,res) {
@@ -28,18 +29,16 @@ w.on('connection', function (wsoc) {
   })
 })
 
+var sender = new osc.UdpSender('127.0.0.1', 7777)
 
-var sender = new osc.UdpSender('127.0.0.1', 7777);
-
-var receiver = new osc.UdpReceiver(7777);
+var receiver = new osc.UdpReceiver(7777)
 receiver.on('', function(e) {
-  console.log(e);
-});
-
-var i = 0;
+  console.log(e)
+})
 
 setInterval(function() {
-  sender.send('/osc_data',
-              'sfiTFNI',
-              ['hello', Math.random(), i++, true, false, null, undefined]);
-}, 1000/10);
+  var p1 = '/LFO2/Rate1'
+  var p2 = '/LFO2/Rate2'
+  sender.send(p1,'f',[Math.random()])
+  sender.send(p2,'f',[Math.random()])
+}, 300)

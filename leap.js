@@ -40,6 +40,6 @@ var i = 0;
 
 setInterval(function() {
   sender.send('/osc_data',
-              'sfiTFNI',
-              ['hello', Math.random(), i++, true, false, null, undefined]);
+    'sfiTFNI',
+    ['hello', Math.random(), i++, true, false, null, undefined]);
 }, 1000/10);

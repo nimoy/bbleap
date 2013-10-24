@@ -2,8 +2,8 @@
 // CLIENT
 
 var host = window.document.location.host.replace(/:.*/, '')
-var lp = require('./leap.js')
 var wss = require('websocket-stream')
+var lp = require('./leap.js')
 var ws = wss('ws://'+host)
 
 var container = document.body
@@ -68,8 +68,8 @@ var i = 0;
 
 setInterval(function() {
   sender.send('/osc_data',
-              'sfiTFNI',
-              ['hello', Math.random(), i++, true, false, null, undefined]);
+    'sfiTFNI',
+    ['hello', Math.random(), i++, true, false, null, undefined]);
 }, 1000/10);
 
 },{"http":24,"omgosc":3,"ws":7}],3:[function(require,module,exports){
