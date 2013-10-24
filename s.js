@@ -1,6 +1,7 @@
 // SERVER
 
 var osc = require('omgosc')
+var filed = require('filed')
 var ws = require('ws').Server
 var wss = require('websocket-stream')
 var http = require('http')
@@ -19,13 +20,26 @@ var w = new ws({server:server})
 
 w.on('connection', function (wsoc) {
   soc = wss(wsoc)
-  data.pipe(soc)
-  soc.on('data', function (d) {
-    var cmd = JSON.parse(d)
-    data.write(cmd)
+  console.log('new soc')
+  soc.on('data', function (chunk) {
+    var d = JSON.parse(chunk)
+    var fins = 2
+    var y = p.pos[1]
+    var val = null
+    var min = 50
+    var max = 450
+    for (f in d) {
+      var p = d[f]
+      fins++
+      if (y < max && y >min) {
+        var val = (p.pos[1]-min)/(max-min)
+        console.log(val)
+        sender.send('/LFO'+fins+'/Rate1','f',[val])
+      }
+    }
   })
   soc.on('close', function () {
-    data.end()
+    console.log('soc closed')
   })
 })
 
@@ -35,10 +49,3 @@ var sender = new osc.UdpSender('127.0.0.1', 7777)
 // receiver.on('', function(e) {
 //   console.log(e)
 // })
-
-setInterval(function() {
-  var p1 = '/LFO4/Rate1'
-  var p2 = '/LFO3/Rate2'
-  sender.send(p1,'f',[Math.random()])
-  sender.send(p2,'f',[Math.random()])
-}, 300)

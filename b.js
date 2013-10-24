@@ -18,8 +18,3 @@ ws.on('open', function () {
 })
 
 ws.pipe(leap).pipe(ws)
-
-ws.on('data', function (d) {
-  var msg = JSON.parse(d)
-  console.log(d)
-})

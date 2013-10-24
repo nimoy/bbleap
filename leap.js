@@ -1,45 +1,54 @@
 // LEAP
 
-var osc = require('omgosc')
-var ws = require('ws')
-var http = require('http')
+var through = require('through')
 
-var server = http.createServer(function (req,res) {
-  if(req.url === '/') req.url = '/i.html'
-  console.log('.'+req.url)
-  filed('.'+req.url).pipe(res)
-})
+module.exports = function () {
 
-server.listen(80, function () {
-  console.log('running')
-})
-
-var w = new ws({server:server})
-
-w.on('connection', function (wsoc) {
-  soc = wss(wsoc)
-  data.pipe(soc)
-  soc.on('data', function (d) {
-    var cmd = JSON.parse(d)
-    data.write(cmd)
+  var s = through(function write (chunk) {
+    var d = JSON.parse(chunk)
+    console.log(d)
+  }, function end () {
+    this.emit('end')
+  },{
+    autoDestroy:false
   })
-  soc.on('close', function () {
-    data.end()
+
+  console.log(Leap.loop)
+
+  Leap.loop({
+    enableGestures:true
+  }, function(frame) {
+    var hands = frame.hands
+    var pointables = frame.pointables
+
+
+    var FINGERS = {}
+    
+    for (var i = 0, pointable; pointable = pointables[i++];) {
+      FINGERS[pointable.id] = {
+        id : pointable.id,
+        x: pointable.tipPosition[0],
+        y: pointable.tipPosition[1],
+        z: pointable.tipPosition[2],
+        pos:pointable.tipPosition,
+        staPos:pointable.stabilizedTipPosition,
+        vel:pointable.tipVelocity
+      } 
+    }
+
+    var allFingers = Object.keys(FINGERS)
+
+    if (frame.gestures.length > 0) {
+      frame.gestures.forEach(function (e) {
+        console.log(e)
+      })
+    }
+
+    if (allFingers.length > 0 && hands.length > 0) {
+      var jFrame = JSON.stringify(FINGERS)
+      s.emit('data',jFrame)
+    }
   })
-})
 
-
-var sender = new osc.UdpSender('127.0.0.1', 7777);
-
-var receiver = new osc.UdpReceiver(7777);
-receiver.on('', function(e) {
-  console.log(e);
-});
-
-var i = 0;
-
-setInterval(function() {
-  sender.send('/osc_data',
-    'sfiTFNI',
-    ['hello', Math.random(), i++, true, false, null, undefined]);
-}, 1000/10);
+  return s
+}
